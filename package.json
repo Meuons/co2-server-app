@@ -1,0 +1,27 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "proxy": "http://localhost:3000",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "http-proxy-middleware": "^2.0.6",
+    "inversify": "^6.0.1",
+    "inversify-express-utils": "^6.4.3",
+    "morgan": "~1.9.1",
+    "node-fetch": "^2.6.8",
+    "pug": "2.0.0-beta11",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5"
+  }
+}
