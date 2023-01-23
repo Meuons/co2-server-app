@@ -1,19 +1,17 @@
-var express = require('express');
-const SingleDevice = require("../controllers/SingleDevice");
-const DeviceList = require("../controllers/DeviceList");
-const AccessToken = require("../controllers/AccessToken");
-const arr = []
+var express = require("express");
+const SingleDevice = require("../services/SingleDevice");
+const DeviceList = require("../services/DeviceList");
+const AccessToken = require("../services/AccessToken");
+const arr = [];
 var router = express.Router();
-const cors = require('cors');
+const cors = require("cors");
 let app = express();
 
 app.use(cors({ origin: true }));
 
 /* GET home page. */
-router.get('/',
-    function(req, res, next) {
-
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
 });
 
 module.exports = router;

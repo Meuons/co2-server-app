@@ -1,27 +1,33 @@
-var express = require('express');
-const SingleDevice = require("../controllers/SingleDevice");
-const DeviceList = require("../controllers/DeviceList");
-const AccessToken = require("../controllers/AccessToken");
-const arr = []
+var express = require("express");
 var router = express.Router();
-const cors = require('cors');
+const cors = require("cors");
+const DeviceData = require("../services/DeviceData");
 let app = express();
 
 app.use(cors({ origin: true }));
 
-
+router.get("/", async function (req, res, next) {
+  const deviceData = await DeviceData.getDeviceData();
+  try {
+    res.send(`{"devices":${JSON.stringify(deviceData)}}`);
+  } catch (err) {
+    console.error(`Error while getting timestamps `, err.message);
+    next(err);
+  }
+});
 
 /* GET users listing. */
-router.get('/', async function(req, res, next) {
-  const deviceList = await DeviceList.getDeviceList()
-
-  const devices = await Promise.all(deviceList.map( async (el, index) => {
-    const device = await SingleDevice.getSingleDevice(index)
-   return device
-
-  }))
- 
-  res.send(`{"devices":${JSON.stringify(devices)}}`)
+router.get("/:deviceName", async function (req, res, next) {
+  const deviceData = await DeviceData.getDeviceData();
+  console.log(JSON.stringify(deviceData));
+  const i = deviceData.findIndex(
+    (obj) => obj.deviceName == req.params.deviceName
+  );
+  if (i == -1) {
+    res.send(`error: No device found`);
+  } else {
+    res.send(`{"${req.params.deviceName}":${JSON.stringify(deviceData[i])}}`);
+  }
 });
 
 module.exports = router;
