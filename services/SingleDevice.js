@@ -5,6 +5,9 @@ const AccessToken = require("./AccessToken");
 
 const getSingleDevice = async (i) => {
   return DeviceList.getDeviceList().then(async (deviceList) => {
+    try {
+      
+    
     const accessToken = await AccessToken.getAccessToken();
     const id = deviceList[i].deviceId;
 
@@ -20,6 +23,10 @@ const getSingleDevice = async (i) => {
       .then((res) => res.json())
       .then((json) => json.data.deviceInfo)
       .catch((err) => console.error("error:" + err));
+    } catch (err) {
+      console.error(err.message);
+    }
   });
+  
 };
 exports.getSingleDevice = getSingleDevice;

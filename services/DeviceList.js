@@ -5,6 +5,7 @@ const AccessToken = require("./AccessToken");
 
 const getDeviceList = async () => {
   return HomeId.getHomeId().then(async (homeId) => {
+    try{
     const url =
       "https://api.millheat.com/uds/getIndependentDevices?homeId=" + homeId;
     const accessToken = await AccessToken.getAccessToken();
@@ -19,6 +20,9 @@ const getDeviceList = async () => {
       .then((res) => res.json())
       .then((json) => json.data.deviceInfoList)
       .catch((err) => console.error("error:" + err));
-  });
+    } catch (err) {
+    console.error(err.message);
+  }
+});
 };
 exports.getDeviceList = getDeviceList;
