@@ -3,10 +3,11 @@ const helper = require("../helper");
 const config = require("../config");
 const moment = require("moment");
 const DeviceData = require("../services/DeviceData");
-
+const sql = require("mssql");
+ 
 const storeDbRecord = async (item) => {
-
-  const sql =    "INSERT INTO Timestamps (StampDate, ECO2, Temperature, DeviceID, DeviceName)  VALUES ( CURRENT_TIMESTAMP, " +
+const poolConnection = await sql.connect(config);
+  const query =    "INSERT INTO Timestamps (StampDate, ECO2, Temperature, DeviceID, DeviceName)  VALUES ( CURRENT_TIMESTAMP, " +
       item.eco2 +
       ", " +
       item.ambientTemp +
@@ -16,12 +17,7 @@ const storeDbRecord = async (item) => {
       `'${item.deviceName}'` +
       ")"
 
-  db.all(sql, (err, rows) => {
-    if (err) {
-      console.log('error: ' + err.message);
-    }
-
-  });
+      const result = await poolConnection.request().query(query)
 
 
 };
