@@ -9,7 +9,7 @@ const storeDbRecord = async (item) => {
   try {
     console.log(new Date().toTimeString())
     const poolConnection = await sql.connect(config);
-    const query = "INSERT INTO Timestamps (StampDate, ECO2, Temperature, DeviceID, DeviceName)  VALUES ( CURRENT_TIMESTAMP, " +
+    const query = "INSERT INTO Timestamps (StampDate, ECO2, Temperature, DeviceID, DeviceName)  VALUES ( DATEADD(HOUR, +1, CURRENT_TIMESTAMP), " +
         item.eco2 +
         ", " +
         item.ambientTemp +
