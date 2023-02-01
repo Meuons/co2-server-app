@@ -7,6 +7,7 @@ const sql = require("mssql");
  
 const storeDbRecord = async (item) => {
   try {
+    console.log(new Date().toTimeString())
     const poolConnection = await sql.connect(config);
     const query = "INSERT INTO Timestamps (StampDate, ECO2, Temperature, DeviceID, DeviceName)  VALUES ( CURRENT_TIMESTAMP, " +
         item.eco2 +
@@ -29,7 +30,8 @@ const create = async () => {
   const deviceData = await DeviceData.getDeviceData();
 
   deviceData.map(async (item, i) => {
-    if (new Date().getSeconds() === 0) storeDbRecord(item);
+    
+   storeDbRecord(item);
   });
 };
 
