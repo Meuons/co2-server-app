@@ -13,13 +13,7 @@ var time = new Date();
 let app = express();
 const timestampData = require("./services/timestampData");
 
-let date = new Date();
-let sec = date.getSeconds();
-setTimeout(()=>{
-  setInterval(()=>{
-     timestampData.create()
-  }, 60000);
-}, (60 - sec) * 1000);
+
 app.use(cors({ origin: true }));
 
 // view engine setup

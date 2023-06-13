@@ -19,7 +19,6 @@ router.get("/", async function (req, res, next) {
 /* GET users listing. */
 router.get("/:deviceName", async function (req, res, next) {
   const deviceData = await DeviceData.getDeviceData();
-  console.log(JSON.stringify(deviceData));
   const i = deviceData.findIndex(
     (obj) => obj.deviceName == req.params.deviceName
   );

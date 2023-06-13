@@ -2,71 +2,68 @@ const express = require("express");
 const config = require("../config");
 const router = express.Router();
 const timestampData = require("../services/timestampData");
-const db = require("../services/db");
+const client = require("../services/db");
 const cors = require("cors");
 const sql = require("mssql");
+
 let app = express();
 app.use(cors({ origin: true }));
 router.get("/", async function (req, res, next) {
-  const poolConnection = await sql.connect(config);
-  const query = `SELECT *  FROM Timestamps`;
-  const result = await poolConnection.request().query(query)
-  const set = result.recordset
-    res.json({
-      set
-    });
+  client.connect( async(err) => {
+    try{
+      const result = await client.query('SELECT * FROM CO2_data')
+      res.json(result.rows)
+      } catch(err){
+        res.json(err)
+      }
+ })
+  
 });
 
-router.get("/name/:deviceName", async function (req, res, next) {
-  const query =  "SELECT StampDate, ECO2, Temperature, DeviceID, DeviceName FROM Timestamps WHERE DeviceName=" +
-    `'${req.params.deviceName}'` +
+router.get("/room/:room", async function (req, res, next) {
+  const query =  "SELECT * FROM CO2_data WHERE room=" +
+    `'${req.params.room}'` +
     "";
-  try{
-    const poolConnection = await sql.connect(config);
-    const result = await poolConnection.request().query(query)
-    const set = result.recordset
-      res.json({
-        set
-      })
-  } catch (err) {
-    console.error(err.message);
-  }
+    client.connect( async(err) => {
+      try{
+        const result = await client.query(query)
+        res.json(result.rows)
+        } catch(err){
+          res.json(err)
+        }
+   })
 });
 
-router.get("/date/:date/name/:deviceName", async function (req, res, next) {
-
+router.get("/date/:date/room/:room", async function (req, res, next) {
+console.log( "SELECT *  FROM CO2_data WHERE time::text LIKE " +
+`'%${req.params.date}%'` + " AND room=" + `'${req.params.room}'` + "")
   const query =
-      "SELECT *  FROM Timestamps WHERE CONVERT(VARCHAR(25), StampDate, 126) LIKE " +
-      `'${req.params.date}%'` + " AND DeviceName=" + `'${req.params.deviceName}'` + "";
-  try{
-      const poolConnection = await sql.connect(config);
-      const result = await poolConnection.request().query(query)
-      const set = result.recordset
-        res.json({
-          set
-        });
-  } catch (err) {
-    console.error(err.message);
-  }
+      "SELECT *  FROM CO2_data WHERE time::text LIKE " +
+      `'%${req.params.date}%'` + " AND room=" + `'${req.params.room}'` + "";
+      client.connect( async(err) => {
+        try{
+          const result = await client.query(query)
+          res.json(result.rows)
+          } catch(err){
+            res.json(err)
+          }
+     })
 });
 
 
 router.get("/date/:date", async function (req, res, next) {
   const query =
-    "SELECT * FROM Timestamps WHERE CONVERT(VARCHAR(25), StampDate, 126) LIKE  " +
-    `'${req.params.date}%'` +
+    "SELECT * FROM CO2_data WHERE time::text LIKE  " +
+    `'%${req.params.date}%'` +
     "";
-  try{
-    console.log(query)
-    const poolConnection = await sql.connect(config);
-    const result = await poolConnection.request().query(query)
-    const set = result.recordset
-      res.json({
-        set
-      });
-  }catch (err) {
-    console.error(err.message);
-  }
+    client.connect( async(err) => {
+      try{
+        const result = await client.query(query)
+        res.json(result.rows)
+        } catch(err){
+          res.json(err)
+        }
+   })
 });
 
 module.exports = router;

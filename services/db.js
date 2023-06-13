@@ -1,14 +1,10 @@
-const sqlite3 = require("sqlite3").verbose();
+const { Client } = require('pg');
+var fs = require('fs');
 
-const db = new sqlite3.Database(
-  "./db/co2_db.db",
-  sqlite3.OPEN_READWRITE,
-  (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log("Connected to the database.");
-  }
-);
+const client = new Client('postgres://xdgqkzyb:erpe7eXlmjnnzFYzS_cl_J5-Viu0T4mj@snuffleupagus.db.elephantsql.com/xdgqkzyb')
 
-module.exports = db;
+client.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+})
+module.exports = client
